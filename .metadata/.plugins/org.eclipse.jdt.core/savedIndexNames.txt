@@ -6,7 +6,6 @@ INDEX VERSION 1.131+C:\Users\LENOVO\Desktop\Proyectos java\Estructuras de datos\
 2773834657.index
 2511617568.index
 3886402465.index
-919501313.index
 3854475047.index
 1870878615.index
 3523662158.index
