@@ -1,0 +1,119 @@
+package com.ProductosABB;
+
+import java.util.*;
+import java.util.function.Function;
+
+public class AplProductosABB {
+	private class Producto {
+		public int IdProducto; // valores de 100-5000
+		public int Existencia;
+		public String toString () {return Rutinas.PonCeros(IdProducto,5);}
+		
+		public Producto(int id, int existencia) {
+			IdProducto = id;
+			Existencia = existencia;
+		}
+	}
+
+	
+	private AplProductosABB() {
+		ArbolBinarioBusqueda<Producto> arbol = new ArbolBinarioBusqueda();
+		Scanner scan = new Scanner(System.in);
+		int opcion = 0, id =0, entrada = 0;
+		Producto p;
+		
+		while(opcion != 11) {
+			displayMenu();
+			opcion=scan.nextInt();
+			switch(opcion) {
+			case 1:
+				if(arbol.Inserta(new Producto(Rutinas.nextInt(100,5000),Rutinas.nextInt(100))))
+					System.out.println("producto insertado");
+				else 
+					System.out.println("no fué posible insertar el producto");
+				break;
+			case 2:
+				System.out.println("Ingrese id del producto a retirar:");
+				id = scan.nextInt();
+				p = new Producto(id,0);
+				if(buscar(arbol,p,(NodoABB<Producto> n) ->{
+					if(n.Info.Existencia == 0) 
+						arbol.Borrar(p);
+				}));
+				break;
+			case 3:
+				System.out.println("Ingrese id del producto:");
+				id = scan.nextInt();
+				System.out.println("Ingrese entrada del producto:");
+				entrada = scan.nextInt();
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 7:
+				break;
+			case 8:
+				break;
+			case 9:
+				break;
+			case 10:
+				break;
+			default:
+			}
+		}
+	}
+
+	public static void main (String[] a) {
+		new AplProductosABB();
+	}
+	
+	private void displayMenu() {
+		System.out.println("1.Insertar un producto.\n"+
+	                       "2.Retirar un producto.\n"+
+				           "3.Registrar entrada a un producto.\n"+
+	                       "4.Registrar entrada a todos los productos con IdProducto mayor a X\n"+
+				           "5.Retirar existencia de un producto\n"+
+	                       "6.Retirar todos los productos con existencia igual a 100\n"+
+				           "7.Consulta: porcentaje de productos registrados\n"+
+	                       "8.Consulta: productos registrados\n"+
+				           "9.Consulta: proporcionado un id, mostrar la ubicación del producto en el árbol\n"+ 
+				           "10. Consulta: niveles inferiores que tienen más nodos que el nivel superior.\n"+
+				           "11.Salir");
+	}
+	
+	private boolean recorrer(NodoABB raiz,Function f) {
+		if(raiz == null)
+			return false;
+		recorrer(raiz.getSubIzq(),f);
+		recorrer(raiz.getSubDer(),f);
+		f.apply(raiz);
+		return true;
+	}
+	
+	private boolean buscar(ArbolBinarioBusqueda<Producto> arbol, Producto producto,Function f) {
+		NodoABB<Producto> raiz = arbol.getRaiz();
+		if (raiz == null || producto == null)
+			return false;
+		String idDato = producto.toString();
+		while(raiz != null) {
+			if(idDato.compareTo(raiz.Info.toString()) == 0)
+				break;
+			if(idDato.compareTo(raiz.Info.toString()) < 0) {
+				raiz = raiz.getSubIzq();
+				continue;
+			}
+			raiz = raiz.getSubDer();
+		}
+		
+		if(raiz != null) {
+			f.apply(raiz);
+			return true;
+		}
+		else
+			return false;
+	}
+
+}
